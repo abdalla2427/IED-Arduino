@@ -44,7 +44,6 @@ void escreverNoSD()
 
   if (!SD.begin(10)) {
     Serial.println("Inicializacao falhou!");
-    while (0.1);
   }
   Serial.println("Inicializacao feita.");
   
@@ -84,10 +83,13 @@ void loop()
   lcd.print("          ");
   lcd.setCursor(0, 5);
   /* Build raw data */
+  double aux;
   for (uint16_t i = 0; i < samples; i++)
   {
-    vReal[i] = analogRead(0);
-    delay(2);
+    aux = analogRead(0);
+    Serial.println(aux);
+    vReal[i] = aux;
+    delay(1);
   }
   for (uint16_t i = 0; i < samples; i++)
   {
