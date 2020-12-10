@@ -4,11 +4,6 @@
 #include "arduinoFFT.h"
 #include <math.h>
 
-#define SCL_INDEX 0x00
-#define SCL_TIME 0x01
-#define SCL_FREQUENCY 0x02
-#define SCL_PLOT 0x03
-
 const int buttonPin = 7;
 double thd = 0;
 double magnitudePredominante = 1;
@@ -40,10 +35,12 @@ double vImag[samples];
 void botaoPressionado()
 {
   readTime();
+  fazerLeitura();
+  escreverNoTerminal();
   fazerFFT();
   calcularTHD(vReal, samples, magnitudePredominante);
   escreverNoDisplay();
-  //escreverNoSD();
+//escreverNoSD();
   delay(5000);
 }
 
@@ -71,7 +68,7 @@ void readTime()
   year = bcdToDec(Wire.read());
 
   tempo = monthday + '-' + month + '-' + year + '--' + hour + ':' + minute + ':' + second;
-//
+
 //  Serial.print(monthday);
 //  Serial.write('-');
 //  Serial.print(month );
@@ -141,7 +138,18 @@ void escreverNoSD()
   }
 }
 
-void fazerFFT()
+void escreverNoTerminal()
+{
+  Serial.println("Registro feito em: ");
+  
+  Serial.println(tempo);
+  for (uint16_t i = 0; i < samples; i++)
+  {
+    Serial.println(vReal[i]);
+  }
+}
+
+void fazerLeitura()
 {
   for (uint16_t i = 0; i < samples; i++)
   {
@@ -152,7 +160,10 @@ void fazerFFT()
     vReal[i] = (double(analogRead(0) * 5) / (1024.0)) - 2.5;
     delayMicroseconds(460);
   }
+}
 
+void fazerFFT()
+{
   arduinoFFT FFT = arduinoFFT();
   FFT.Windowing(vReal, samples, FFT_WIN_TYP_HAMMING, FFT_FORWARD);  /* Weigh data */
 
