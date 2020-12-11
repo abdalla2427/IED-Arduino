@@ -40,7 +40,6 @@ void botaoPressionado()
   fazerFFT();
   calcularTHD(vReal, samples, magnitudePredominante);
   escreverNoDisplay();
-//escreverNoSD();
   delay(5000);
 }
 
@@ -66,23 +65,6 @@ void readTime()
   monthday = bcdToDec(Wire.read());
   month = bcdToDec(Wire.read());
   year = bcdToDec(Wire.read());
-
-  tempo = monthday + '-' + month + '-' + year + '--' + hour + ':' + minute + ':' + second;
-
-//  Serial.print(monthday);
-//  Serial.write('-');
-//  Serial.print(month );
-//  Serial.write('-');
-//  Serial.print(year);
-//  Serial.write('-');
-//  Serial.write('-');
-//
-//  Serial.print(hour);
-//  Serial.write(':');
-//  Serial.print(minute);
-//  Serial.write(':');
-//  Serial.print(second);
-//  Serial.write(0xd);
 }
 
 
@@ -142,7 +124,21 @@ void escreverNoTerminal()
 {
   Serial.println("Registro feito em: ");
   
-  Serial.println(tempo);
+  Serial.print(monthday);
+  Serial.write('-');
+  Serial.print(month);
+  Serial.write('-');
+  Serial.print(year);
+  Serial.write('-');
+  Serial.write('-');
+
+  Serial.print(hour);
+  Serial.write(':');
+  Serial.print(minute);
+  Serial.write(':');
+  Serial.print(second);
+  Serial.write(0xd);
+  
   for (uint16_t i = 0; i < samples; i++)
   {
     Serial.println(vReal[i]);
